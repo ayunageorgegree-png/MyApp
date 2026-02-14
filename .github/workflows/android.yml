@@ -1,52 +1,53 @@
 
-name: Build Android APK
+name: Android Build
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-22.04
 
-cordova build android
-
     steps:
-      - uses: actions/checkout@v4
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Node
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      # 3️⃣ Setup Java 17
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
-            distribution: temurin
-            java-version: 17
-      
-      - name: Install npm packages
-        run: npm install
+          distribution: temurin
+          java-version: 17
 
-      - name: Add Android Platform
-        run: npx cordova platform add android
-
+      # 4️⃣ Install Cordova globally
       - name: Install Cordova
         run: npm install -g cordova
 
+      # 5️⃣ Install project dependencies
       - name: Install Dependencies
         run: npm install
 
+      # 6️⃣ Ensure Android platform added
       - name: Ensure Android Platform
         run: cordova platform add android@12.0.1 || echo "Android platform already added"
 
+      # 7️⃣ Build APK (tanpa Gradle wrapper)
       - name: Build APK
-        run: cordova build android
---no-gradle-daemon
+        run: cordova build android --no-gradle-daemon
 
+      # 8️⃣ Upload APK artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: MyApp-debug-apk
           path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
