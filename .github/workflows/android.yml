@@ -37,7 +37,7 @@ jobs:
         run: npm install
 
      - name: Ensure Android Platform
-       run: cordova platform add   android@12.0.1 || echo "Android platform already added"
+       run: cordova platform add android@12.0.1 || echo "Android platform already added"
 
       
       - name: Build APK
