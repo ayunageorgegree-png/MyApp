@@ -10,6 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
+cordova build android
+
     steps:
       - uses: actions/checkout@v4
 
